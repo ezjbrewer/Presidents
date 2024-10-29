@@ -1,0 +1,6 @@
+@Presidents_HostAddress = http://localhost:5228
+
+GET {{Presidents_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
