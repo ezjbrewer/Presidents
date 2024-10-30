@@ -18,19 +18,16 @@ namespace Presidents.AddControllers // Fixed namespace declaration
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAllPresidents()
+        public IActionResult GetAllPresidents()
         {
-            // declaring empty list to add person entities in later
             List<Person> presidents = [];
 
-            // adding each president 
             foreach (PresidentialAppointment presidentialAppointment in _dbContext.PresidentialAppointments.Where(pa => pa.PublicOfficeId == 10).ToList())
             {
                 Person president = _dbContext.People.FirstOrDefault(p => p.Id == presidentialAppointment.PersonId);
                 presidents.Add(president);
             }
 
-            // returning DTOs
             return Ok(presidents.Select(p => new PersonDTO
             {
                 Id = p.Id,
