@@ -11,4 +11,5 @@ public class PersonDTO {
     public PartyDTO? Party { get; set; }
     public List<PersonDTO>? Presidents { get; set; }
     public List<PersonDTO>? VicePresidents { get; set; }
+    public List<PreviousExperienceDTO>? PreviousExperiences { get; set; }
 }
