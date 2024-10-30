@@ -1,6 +1,6 @@
 namespace Presidents.Models.DTOs;
 
-public class PreviousExperience {
+public class PreviousExperienceDTO {
     public int Id { get; set; }
     public int PersonId { get; set; }
     public PersonDTO? Person { get; set; }
