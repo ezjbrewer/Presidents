@@ -6,7 +6,7 @@
 4. Run `dotnet restore`
 5. Install `MySQL` if not already
 6. Install MySQLConnector: `dotnet add package MySQLConnector`
-7. In `appsettingss.json` change database username and password to your MySQL username and password
+7. In `appsettings.json` change database username and password to your MySQL username and password
 8. Install EFCore tools: `dotnet add package Microsoft.EntityFrameworkCore`
 9. Adjust connection string name in `Program.cs` if needed
 10. Add migrations `dotnet ef migrations add InitialCreate`
