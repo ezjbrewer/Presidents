@@ -20,9 +20,10 @@ namespace Presidents.AddControllers // Fixed namespace declaration
         [HttpGet()]
         public IActionResult GetAllPresidents()
         {
-            List<Person> presidents = [];
+            List<Person> presidents = new();
+            List<PresidentialAppointment> presidentialAppointments =  _dbContext.PresidentialAppointments.Where(pa => pa.PublicOfficeId == 10).ToList();
 
-            foreach (PresidentialAppointment presidentialAppointment in _dbContext.PresidentialAppointments.Where(pa => pa.PublicOfficeId == 10).ToList())
+            foreach (PresidentialAppointment presidentialAppointment in presidentialAppointments)
             {
                 Person president = _dbContext.People.FirstOrDefault(p => p.Id == presidentialAppointment.PersonId);
                 presidents.Add(president);
