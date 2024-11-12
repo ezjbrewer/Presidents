@@ -20,15 +20,16 @@ namespace Presidents.AddControllers // Fixed namespace declaration
         [HttpGet()]
         public IActionResult GetAllVicePresidents()
         {
-            List<Person> presidents = [];
+            List<Person> vicePresidents = new();
+            List<PresidentialAppointment> presidentialAppointments = _dbContext.PresidentialAppointments.Where(pa => pa.PublicOfficeId == 11).ToList();
 
-            foreach (PresidentialAppointment presidentialAppointment in _dbContext.PresidentialAppointments.Where(pa => pa.PublicOfficeId == 11).ToList())
+            foreach (PresidentialAppointment presidentialAppointment in presidentialAppointments)
             {
                 Person president = _dbContext.People.FirstOrDefault(p => p.Id == presidentialAppointment.PersonId);
-                presidents.Add(president);
+                vicePresidents.Add(president);
             }
 
-            return Ok(presidents.Select(p => new PersonDTO
+            return Ok(vicePresidents.Select(p => new PersonDTO
             {
                 Id = p.Id,
                 FirstName = p.FirstName,
