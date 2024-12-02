@@ -25,7 +25,7 @@ namespace Presidents.AddControllers // Fixed namespace declaration
 
             foreach (PresidentialAppointment presidentialAppointment in presidentialAppointments)
             {
-                Person president = _dbContext.People.FirstOrDefault(p => p.Id == presidentialAppointment.PersonId);
+                Person? president = _dbContext.People.FirstOrDefault(p => p.Id == presidentialAppointment.PersonId);
                 presidents.Add(president);
             }
 
@@ -38,6 +38,49 @@ namespace Presidents.AddControllers // Fixed namespace declaration
                 DateOfBirth = (DateTime)p.DateOfBirth,
                 DateOfDeath = p.DateOfDeath.HasValue ? p.DateOfDeath : null,
             }).ToList());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetAPresident(int id)
+        {
+            // Person Collector
+            Person? person = _dbContext.People.FirstOrDefault(p => p.Id == id);
+
+            if (person == null)
+            {
+                return NotFound($"Person does not exist with id: {id}");
+            }
+
+            // Party Collection
+            PresidentialAppointment? appointmentWithParty = _dbContext.PresidentialAppointments
+                                                            .FirstOrDefault(pA => pA.PersonId == person.Id);
+            Party? party = _dbContext.Parties.FirstOrDefault(p => p.Id == appointmentWithParty.PartyId);
+            PartyDTO partyDTO = PartyDTOCreator.ToPartyDTO(party);
+
+            //BirthPlace Collection
+            BirthPlace? birthPlace = _dbContext.BirthPlaces
+                                    .FirstOrDefault(bP => bP.PersonId == person.Id);
+            State? birthState = _dbContext.States
+                                .FirstOrDefault(s => s.Id == birthPlace.StateId);
+            BirthPlaceDTO birthPlaceDTO = BirthPlaceDTOCreator.ToBirthPlaceDTO(birthPlace, birthState);
+
+            // Previous Experience Collection
+            List<PreviousExperience> previousExperiences = _dbContext.PreviousExperiences.Where(pE => pE.PersonId == person.Id).ToList();
+            List<PreviousExperienceDTO> previousExperienceDTOs = new();
+
+            foreach(var pE in previousExperiences)
+            {
+                State? state = _dbContext.States.FirstOrDefault(s => s.Id == pE.StateId);
+                PublicOffice? publicOffice = _dbContext.PublicOffices.FirstOrDefault(pO => pO.Id == pE.PublicOfficeId);
+
+                PreviousExperienceDTO newPreviousExperienceDTO = PreviousExperienceDTOCreator.ToPreviousExperienceDTO(pE, publicOffice, state);
+                previousExperienceDTOs.Add(newPreviousExperienceDTO);
+            }
+
+            // PersonDTO Compiler
+            PersonDTO newPersonDTO = PersonDTOCreator.ToPersonWithPreviousExperienceDTO(person, previousExperienceDTOs, birthPlaceDTO, partyDTO);
+
+            return Ok(newPersonDTO);
         }
     }
 }
