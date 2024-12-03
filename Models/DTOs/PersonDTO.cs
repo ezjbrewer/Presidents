@@ -41,4 +41,24 @@ public static class PersonDTOCreator
 
         return personDTO;
     }
+
+    public static PersonDTO ToPersonDTO(Person person)
+    {
+        if (person == null)
+        {
+            throw new ArgumentNullException(nameof(person));
+        }
+
+        PersonDTO personDTO = new PersonDTO
+        {
+            Id = person.Id,
+            FirstName = person.FirstName,
+            MiddleName = person?.MiddleName,
+            LastName = person.LastName,
+            DateOfBirth = (DateTime)person.DateOfBirth,
+            DateOfDeath = person.DateOfDeath.HasValue ? person.DateOfDeath : null
+        };
+
+        return personDTO;
+    }
 }
