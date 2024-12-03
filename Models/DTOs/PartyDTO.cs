@@ -26,4 +26,23 @@ public static class PartyDTOCreator
 
         return partyDTO;
     }
+
+    public static PartyDTO ToPartyWithPeopleDTO(Party party, List<PersonDTO> presidents, List<PersonDTO> vicePresidents)
+    {
+        if (party == null)
+        {
+            throw new ArgumentNullException(nameof(party));
+        }
+
+        PartyDTO partyDTO = new PartyDTO
+        {
+            Id = party.Id,
+            Name = party.Name,
+            Color = party.Color,
+            Presidents = presidents,
+            VicePresidents = vicePresidents
+        };
+
+        return partyDTO;
+    }
 }
